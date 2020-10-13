@@ -1,0 +1,7 @@
+.nav-link.active {
+    color: white !important;
+    background-color: #048c73 !important;
+}
+.nav-link {
+    color: black !important;
+}
