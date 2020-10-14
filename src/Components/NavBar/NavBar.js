@@ -21,19 +21,12 @@ const styles = {
   },
   centerText: {
     textAlign: "center",
-    marginTop: "40px",
+    marginTop: "5px",
   },
   icon: {
-    marginTop: "30px",
+    marginTop: "10px",
     height: "25px",
     width: "25px",
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)",
-  },
-  imgWrap: {
-    width: "100%",
   },
   notDecoration: {
     textDecoration: "none",
@@ -70,13 +63,10 @@ let itemsMap = items.map((item, i) => {
           color: "#52D967",
         }}
       >
-        <Row>
-          <Col xs={12}>
-            <div style={styles.imgWrap}>
-              <img src={item.icono} alt={item.word} style={styles.icon} />
-            </div>
-          </Col>
-        </Row>
+        <div className="col-xs-12">
+        <img src={item.icono} alt={item.word} style={styles.icon} className="mx-auto d-block" />
+        </div>
+            
         <Row>
           <Col xs={12}>
             <div style={styles.centerText}>{item.word}</div>

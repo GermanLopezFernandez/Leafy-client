@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 const styles = {
@@ -24,17 +21,16 @@ const styles = {
   subTitle: {
     width: "100%",
   },
-  titleContainer: {
-    marginTop: "50px",
-    paddingBottom: "50px",
-    textAlign: "center",
-  },
   button: {
     backgroundColor: "#52D967",
     border: "none",
-    marginTop: "30px",
     maxWidth: "200px",
-    width: "100px",
+    width: "500px",
+    marginTop: "30px",
+  },
+  titleContainer: {
+    marginTop: "30px",
+    textAlign: "center",
   },
   infoTitle: {
     width: "100%",
@@ -49,9 +45,8 @@ const styles = {
   },
   buttonLogout: {
     maxWidth: "200px",
-    width: "600px",
-    marginLeft: "40px",
-    marginTop: "60px",
+    width: "500px",
+    marginTop: "30px",
   },
 };
 export class Presentacion extends Component {
@@ -59,57 +54,41 @@ export class Presentacion extends Component {
     return (
       <div>
         <div style={styles.cuadroVerde}>TacoDeGerman</div>
-        <Row>
-          <Col xs={6}>
-            <div style={styles.titleContainer}>
-              <div style={styles.title}>Rol</div>
-              <div style={styles.subTitle}>Admin</div>
-            </div>
-          </Col>
-          <Col xs={6}>
-            <div style={styles.titleContainer}>
-              <div style={styles.title}>Id de casa</div>
-              <div style={styles.subTitle}>3123172</div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <div style={styles.infoTitle}>Correo</div>
-            <div style={styles.infoSubTitle}>
-              germanlopezfernandez.glf@gmail.com
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <div style={styles.infoTitle}>Usuario</div>
-            <div style={styles.infoSubTitle}>TacoDeGerman</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <div style={styles.infoTitle}>Correo</div>
-            <div style={styles.infoSubTitle}>
-              germanlopezfernandez.glf@gmail.com
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6} style={styles.title}></Col>
-          <Col xs={6}>
-            <Button variant="success" style={styles.button}>
-              Editar
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <Button variant="danger" style={styles.buttonLogout}>
-              Salir
-            </Button>
-          </Col>
-        </Row>
+        <div style={styles.titleContainer}>
+          <div className="col-xs-12 mt-2">
+            <div style={styles.title}>Rol</div>
+            <div style={styles.subTitle}>Admin</div>
+          </div>
+          <div className="col-xs-12 mt-2">
+            <div style={styles.title}>Id de casa</div>
+            <div style={styles.subTitle}>3123172</div>
+          </div>
+        </div>
+
+        <div className="col-xs-12">
+          <div style={styles.infoTitle}>Correo</div>
+          <div style={styles.infoSubTitle}>
+            germanlopezfernandez.glf@gmail.com
+          </div>
+        </div>
+        <div className="col-xs-12">
+          <div style={styles.infoTitle}>Usuario</div>
+          <div style={styles.infoSubTitle}>TacoDeGerman</div>
+        </div>
+        <div className="col-xs-12">
+          <div style={styles.infoTitle}>Correo</div>
+          <div style={styles.infoSubTitle}>
+            germanlopezfernandez.glf@gmail.com
+          </div>
+        </div>
+        <div className="col-xs-12 d-flex justify-content-center">
+          <Button style={styles.button}>Editar</Button>
+        </div>
+        <div className="col-xs-12 d-flex justify-content-center">
+          <Button variant="danger" style={styles.buttonLogout}>
+            Salir
+          </Button>
+        </div>
       </div>
     );
   }

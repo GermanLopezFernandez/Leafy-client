@@ -76,6 +76,8 @@ export class Pop extends Component {
     this.handleSelectOpciones = this.handleSelectOpciones.bind(this);
     this.sumar = this.sumar.bind(this);
     this.restar = this.restar.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleSelectRegistrar = (event) => {
@@ -88,6 +90,21 @@ export class Pop extends Component {
     this.setState({
       selected: "Opciones",
     });
+  };
+
+  handleSubmit = () => {
+    const objeto = {
+      idDispositivo: this.props.item.idDispositivo,
+      horasUso: this.state.horas, 
+    }
+    this.props.sumarUso(objeto);
+  };
+
+  handleDelete = () => {
+    const objeto = {
+      deviceID: this.props.item.idDispositivo, 
+    }
+    this.props.eliminar(objeto);
   };
 
   sumar = () => {
@@ -108,13 +125,13 @@ export class Pop extends Component {
 
   render() {
     let botonEliminar = (
-      <Button variant="danger" style={styles.buttonDelete} onClick={this.props.handleClose}>
+      <Button variant="danger" style={styles.buttonDelete} onClick={() => this.handleDelete()}>
         Eliminar dispositivo
       </Button>
     );
 
     let botonAgregar = (
-      <Button style={styles.buttonSubmit} onClick={this.props.handleClose}>
+      <Button style={styles.buttonSubmit} onClick={() => this.handleSubmit()}>
         Registrar Uso
       </Button>
     );
@@ -153,7 +170,7 @@ export class Pop extends Component {
                 Nombre:
               </Col>
               <Col xs={6}>
-              {this.props.item.nombre}
+              {this.props.item.NombreDispositivo}
               </Col>
             </Row>
           </div>
@@ -164,7 +181,7 @@ export class Pop extends Component {
               Tipo:
               </Col>
               <Col xs={6}>
-              {this.props.item.tipo}
+              {this.props.item.Tipo}
               </Col>
             </Row>
           </div>
@@ -172,10 +189,10 @@ export class Pop extends Component {
           <div style={styles.textEliminar}>
             <Row>
               <Col xs={6}>
-              Variante:
+              Tamaño:
               </Col>
               <Col xs={6}>
-              {this.props.item.variante}
+              {this.props.item.Tamaño}
               </Col>
             </Row>
           </div>
@@ -195,7 +212,7 @@ export class Pop extends Component {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{this.props.item.nombre}</Modal.Title>
+          <Modal.Title>{this.props.item.NombreDispositivo}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={styles.containerBody}>
           <Nav fill variant="pills" defaultActiveKey={this.state.selected}>

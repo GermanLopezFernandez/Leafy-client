@@ -1,5 +1,28 @@
 import React, { Component } from "react";
-import { Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Alert,
+  Container,
+} from "reactstrap";
+import Cookies from 'js-cookie';
+import axios from "axios";
+
+const styles = {
+  title: {
+    paddingTop: "50px",
+    fontSize: "30px",
+    paddingBottom: "10px",
+  },
+  container: {
+    backgroundColor: "white !important",
+    minHeight: "100vh",
+    minWidth: "100vw",
+  },
+};
 
 export default class Login extends Component {
   constructor(props) {
@@ -13,87 +36,98 @@ export default class Login extends Component {
   }
 
   signIn = () => {
-    const data = { email: this.email, password: this.password };
-
-    const requesInfo = {
-      method: "POST",
-      body: JSON.stringify({ data }),
-      headers: new Headers({
-        "Content-type": "application/json",
-      }),
-    };
-    fetch("http//localhost:3000/login", requesInfo)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Email o contraseña incorrecto");
+    const userData = { email: this.email, password: this.password };
+    axios
+      .post(
+        "/auth/login", userData,
+        { withCredentials: true },
+        { crossDomain: true }
+        )     
+      .then((res) => {
+        this.setState({
+            loading: false,
+        })
+        axios.defaults.headers.common['Authorization'] = "Bearer " + Cookies.get('jwt');
+        this.props.history.push("/home");
       })
-      .then((token) => {
-        localStorage.setItem("token", token);
-        this.props.history.push("/dash");
-      })
-      .catch((e) => {
-        this.setState({ message: e.message });
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          errors: err,
+          loading: false,
+        });
       });
-  };
+  }
 
   render() {
     return (
-      <div className="col-md-6">
-        <h1>Iniciar Sesion</h1>
-        <hr className="my-3" />
-        <Form>
-          <FormGroup>
-            <Label for="email">Email </Label>
-            <Input
-              type="text"
-              id="email"
-              onChange={(e) => (this.email = e.target.value)}
-              placeholder="Correo"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Contraseña</Label>
-            <Input
-              type="password"
-              id="password"
-              onChange={(e) => (this.password = e.target.value)}
-              placeholder="Contraseña"
-            />
-          </FormGroup>
+      <Container styles={styles.container}>
+        <div>
+          <h1 style={styles.title}>Iniciar Sesion</h1>
 
-          {this.state.message !== "" ? (
-            <Alert color="danger" className="text-center">
-              {this.state.message}
-            </Alert>
-          ) : (
-            ""
-          )}
+          <Form>
+            <FormGroup>
+              <Label for="email">
+               Correo
+              </Label>
+              <Input
+                type="text"
+                id="email"
+                style={{
+                  width: "100%",
+                  backgroundColor:"white",
+                  paddingLeft: "8px",
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                }}
+                onChange={(e) => (this.email = e.target.value)}
+                placeholder="Correo"
+              />
+              
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Contraseña</Label>
+              <Input
+                type="password"
+                id="password"
+                onChange={(e) => (this.password = e.target.value)}
+                placeholder="Contraseña"
+              />
+            </FormGroup>
 
-          <div class="d-flex justify-content-center">
-            <Button color="link" href="/register">
-              Crear Una cuenta
-            </Button>
-          </div>
+            {this.state.message !== "" ? (
+              <Alert color="danger" className="text-center">
+                {this.state.message}
+              </Alert>
+            ) : (
+              ""
+            )}
 
-          <div class="d-flex justify-content-center">
-            <Button
-              color="primary"
-              onClick={this.signIn}
-              class="btn btn-default"
-              size="lg"
-              style={{
-                backgroundColor: "#048c73",
-                borderRadius: "15px",
-                border: "none",
-              }}
-            >
-              Ingresar
-            </Button>
-          </div>
-        </Form>
-      </div>
+            <div class="d-flex justify-content-center">
+              <Button color="link" href="/register">
+                Crear Una cuenta
+              </Button>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <Button
+                color="primary"
+                onClick={this.signIn}
+                class="btn btn-default"
+                size="lg"
+                style={{
+                  backgroundColor: "#52D967",
+                  borderRadius: "15px",
+                  border: "none",
+                  minWidth: "150px",
+                }}
+              >
+                Ingresar
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Container>
     );
   }
 }

@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 
 import listaDispositivos from "../extras/listaDispositivos";
 
+
 const styles = {
   limit: {
     maxWidth: "70%"
@@ -20,12 +21,22 @@ export class Pop extends Component {
       variacion: "",
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
+  };
+
+  handleSubmit = () => {
+    const objeto = {
+      tipo: this.state.dispositivo,
+      variante: this.state.variacion, 
+      nombre: this.state.nombre
+    }
+    this.props.registrarDispositivo(objeto);
   };
 
   render() {
@@ -92,7 +103,7 @@ export class Pop extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={this.props.handleClose}>
+          <Button variant="secondary" onClick={() => this.handleSubmit()}>
             Añadir
           </Button>
         </Modal.Footer>

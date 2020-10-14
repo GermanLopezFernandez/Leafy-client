@@ -53,7 +53,7 @@ export class AddItem extends Component {
   render() {
     return (
     <div>
-        <Pop showModal={this.state.showModal} handleClose={() => this.handleClose()}/>
+        <Pop showModal={this.state.showModal} handleClose={() => this.handleClose()} registrarDispositivo={(objeto) => this.props.registrarDispositivo(objeto)}/>
         <div style={styles.container}>
         <Row>
           <Col xs={10}>

@@ -59,25 +59,44 @@ export class Dispositivo extends Component {
   };
 
   render() {
-    let iconoDispositivo = listaDispositivos.find( electronico => electronico.nombre === this.props.item.tipo).icono;
+    let iconoDispositivo = listaDispositivos.find(
+      (electronico) => electronico.nombre === this.props.item.Tipo
+    ).icono;
     return (
       <div>
-        <Pop showModal={this.state.showModal} item={this.props.item} handleClose={() => this.handleClose()}/>
+        <Pop
+          showModal={this.state.showModal}
+          item={this.props.item}
+          handleClose={() => this.handleClose()}
+          sumarUso={(objeto) => this.props.sumarUso(objeto)} 
+          eliminar={(objeto) => this.props.eliminar(objeto)} 
+        />
         <div style={styles.container}>
           <Row>
             <Col xs={2}>
-            <img src={iconoDispositivo} alt="Icono Producto" style={styles.icon} onClick={ () => this.handleOpen() }/>
-
+              <img
+                src={iconoDispositivo}
+                alt="Icono Producto"
+                style={styles.icon}
+                onClick={() => this.handleOpen()}
+              />
             </Col>
             <Col xs={5}>
-              <div style={styles.nombre}>{this.props.item.nombre}</div>
+              <div style={styles.nombre}>
+                {this.props.item.NombreDispositivo}
+              </div>
             </Col>
             <Col xs={3}>
-              <div style={styles.horas}>{this.props.item.horas} hrs</div>
+              <div style={styles.horas}>{this.props.item.Sumatoria} hrs</div>
             </Col>
             <Col xs={2}>
               <div style={styles.imgWrap}>
-                <img src={iconoEditar} alt="Icono editar" style={styles.icon} onClick={ () => this.handleOpen() }/>
+                <img
+                  src={iconoEditar}
+                  alt="Icono editar"
+                  style={styles.icon}
+                  onClick={() => this.handleOpen()}
+                />
               </div>
             </Col>
           </Row>

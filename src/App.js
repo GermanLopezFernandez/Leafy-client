@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from "axios";
 
 import Home from "./pages/Home";
 import Dispositivos from "./pages/Dispositivos"
@@ -15,12 +16,9 @@ import PrivateRoute from './Components/Login/auth';
 import {RegisterForm} from './images/RegisterForm';
 import Login from './pages/Login'
 
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#f4f1de",
-  }
-}
+axios.defaults.baseURL =
+  'http://localhost:5000';
+axios.defaults.headers.common['access-control-allow-origin'] = "*"
 
 export class App extends Component {
   render() {
@@ -28,7 +26,6 @@ export class App extends Component {
       <div>
         <Router>
           <ScrollToTop />
-          <div style={styles.container}>
           <Switch>
             <Route exact path="/home" component={Home} />
             <Route exact path="/dispositivos" component={Dispositivos} />
@@ -42,7 +39,6 @@ export class App extends Component {
             <Route path="/join" component={join}/>
             <Route path="/create" component={Create}/>
           </Switch>
-          </div>
         </Router>
       </div>
     );
