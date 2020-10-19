@@ -5,23 +5,24 @@ import Form from "react-bootstrap/Form";
 
 import listaDispositivos from "../extras/listaDispositivos";
 
-
 const styles = {
   limit: {
-    maxWidth: "70%"
-  }
-}
+    maxWidth: "70%",
+  },
+};
 
 export class Pop extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dispositivo: "",
+      tipo: "",
       nombre: "",
       variacion: "",
+      opciones: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.checkFirstSelection = this.checkFirstSelection.bind(this);
   }
 
   handleChange = (event) => {
@@ -32,26 +33,38 @@ export class Pop extends Component {
 
   handleSubmit = () => {
     const objeto = {
-      tipo: this.state.dispositivo,
-      variante: this.state.variacion, 
-      nombre: this.state.nombre
-    }
+      tipo: this.state.tipo,
+      tamaño: this.state.variacion,
+      nombreDispositivo: this.state.nombre,
+    };
     this.props.registrarDispositivo(objeto);
+    this.props.handleClose();
+  };
+
+  checkFirstSelection = (event) => {
+    let arrVariante = [];
+    arrVariante = listaDispositivos.find(
+      (electronico) => electronico.nombre === event.target.value
+    ).variante;
+    this.setState({
+      [event.target.name]: event.target.value,
+      opciones: arrVariante,
+      variacion: arrVariante[0],
+    });
   };
 
   render() {
     const selectDispositivo = listaDispositivos.map((item, i) => {
-      return <option  style={styles.limit} key={i}>{item.nombre}</option>;
+      return (
+        <option style={styles.limit} key={i}>
+          {item.nombre}
+        </option>
+      );
     });
 
-    let arrVariante = []
-    if(this.state.dispositivo){
-        arrVariante = listaDispositivos.find( electronico => electronico.nombre === this.state.dispositivo ).variante;
-    }
-
-    const selectVariante = arrVariante.map((item, i) => {
-        return <option key={i}>{item}</option>;
-      });
+    const selectVariante = this.state.opciones.map((item, i) => {
+      return <option key={i}>{item}</option>;
+    });
 
     return (
       <Modal
@@ -72,8 +85,8 @@ export class Pop extends Component {
               <Form.Control
                 as="select"
                 htmlSize={5}
-                onChange={this.handleChange}
-                name="dispositivo"
+                onChange={this.checkFirstSelection}
+                name="tipo"
               >
                 {selectDispositivo}
               </Form.Control>
@@ -82,7 +95,7 @@ export class Pop extends Component {
               <Form.Label>Escoge una variante</Form.Label>
               <Form.Control
                 as="select"
-                disabled={!this.state.dispositivo}
+                disabled={!this.state.tipo}
                 onChange={this.handleChange}
                 name="variacion"
                 style={styles.limit}

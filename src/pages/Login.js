@@ -1,15 +1,8 @@
 import React, { Component } from "react";
-import {
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  Alert,
-  Container,
-} from "reactstrap";
-import Cookies from 'js-cookie';
+import { Form, FormGroup, Label, Input, Button, Container } from "reactstrap";
+import Cookies from "js-cookie";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
 
 const styles = {
   title: {
@@ -27,37 +20,71 @@ const styles = {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
-      message: this.props.location.state
-        ? this.props.location.state.message
-        : "",
+      message: "",
+      emailError: "",
+      passwordError: "",
+      email: "",
+      password: "",
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.signIn = this.signIn.bind(this);
   }
 
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
   signIn = () => {
-    const userData = { email: this.email, password: this.password };
-    axios
-      .post(
-        "/auth/login", userData,
-        { withCredentials: true },
-        { crossDomain: true }
-        )     
-      .then((res) => {
-        this.setState({
-            loading: false,
-        })
-        axios.defaults.headers.common['Authorization'] = "Bearer " + Cookies.get('jwt');
-        this.props.history.push("/home");
-      })
-      .catch((err) => {
-        console.log(err);
-        this.setState({
-          errors: err,
-          loading: false,
-        });
+    if (!this.state.email) {
+      this.setState({
+        loading: false,
+        emailError: "No debe estar vacío",
+        message: "",
       });
-  }
+    } else {
+      this.setState({
+        emailError: "",
+      });
+    }
+    if (!this.state.password) {
+      this.setState({
+        loading: false,
+        passwordError: "No debe estar vacío",
+        message: "",
+      });
+    } else {
+      this.setState({
+        passwordError: "",
+      });
+    }
+    if (!(this.state.email === "" || this.state.password === "")) {
+      const userData = { correo: this.state.email, contraseñaUsuario: this.state.password };
+      axios
+        .post(
+          "/auth/login",
+          userData,
+          { withCredentials: true },
+          { crossDomain: true }
+        )
+        .then((res) => {
+          this.setState({
+            loading: false,
+          });
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + Cookies.get("jwt");
+          this.props.history.push("/home");
+        })
+        .catch((err) => {
+          this.setState({
+            message: err.response.data.error,
+            loading: false,
+          });
+        });
+    }
+  };
 
   render() {
     return (
@@ -67,53 +94,64 @@ export default class Login extends Component {
 
           <Form>
             <FormGroup>
-              <Label for="email">
-               Correo
-              </Label>
+              <Label>Correo</Label>
               <Input
-                type="text"
-                id="email"
+                type="email"
+                name="email"
                 style={{
                   width: "100%",
-                  backgroundColor:"white",
+                  backgroundColor: "white",
                   paddingLeft: "8px",
                   paddingTop: "6px",
                   paddingBottom: "6px",
                 }}
-                onChange={(e) => (this.email = e.target.value)}
+                onChange={(event) => this.handleChange(event)}
                 placeholder="Correo"
               />
-              
             </FormGroup>
+            {this.state.emailError !== "" ? (
+              <Alert variant="danger" className="text-center">
+                {this.state.emailError}
+              </Alert>
+            ) : (
+              ""
+            )}
             <FormGroup>
-              <Label for="password">Contraseña</Label>
+              <Label>Contraseña</Label>
               <Input
                 type="password"
-                id="password"
-                onChange={(e) => (this.password = e.target.value)}
+                name="password"
+                onChange={(event) => this.handleChange(event)}
                 placeholder="Contraseña"
               />
             </FormGroup>
 
-            {this.state.message !== "" ? (
-              <Alert color="danger" className="text-center">
-                {this.state.message}
+            {this.state.passwordError !== "" ? (
+              <Alert variant="danger" className="text-center">
+                {this.state.passwordError}
               </Alert>
             ) : (
               ""
             )}
 
-            <div class="d-flex justify-content-center">
+            {this.state.message !== "" ? (
+              <Alert variant="danger" className="text-center">
+                {this.state.message}
+              </Alert>
+            ) : (
+              ""
+            )}
+            <div className="d-flex justify-content-center">
               <Button color="link" href="/register">
                 Crear Una cuenta
               </Button>
             </div>
 
-            <div class="d-flex justify-content-center">
+            <div className="d-flex justify-content-center">
               <Button
                 color="primary"
-                onClick={this.signIn}
-                class="btn btn-default"
+                onClick={() => this.signIn()}
+                className="btn btn-default"
                 size="lg"
                 style={{
                   backgroundColor: "#52D967",

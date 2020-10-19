@@ -48,7 +48,7 @@ const styles = {
     fontSize: "20px",
   },
   textEliminar: {
-    fontSize: "20px",
+    fontSize: "17px",
     marginTop: "5px",
     marginBottom: "5px",
   },
@@ -98,13 +98,19 @@ export class Pop extends Component {
       horasUso: this.state.horas, 
     }
     this.props.sumarUso(objeto);
+    this.setState({
+      horas: 0
+    })
+    this.props.handleClose()
   };
 
   handleDelete = () => {
     const objeto = {
-      deviceID: this.props.item.idDispositivo, 
+      idDispositivo: this.props.item.idDispositivo, 
     }
-    this.props.eliminar(objeto);
+    this.props.eliminar(objeto)
+      this.props.handleClose()
+    ;
   };
 
   sumar = () => {
@@ -122,6 +128,14 @@ export class Pop extends Component {
       });
     }
   };
+
+  truncateText = (text, length) => {
+    if (text.length <= length) {
+      return text;
+    }
+    return text.substr(0, length) + '..';
+  };
+
 
   render() {
     let botonEliminar = (
@@ -170,7 +184,7 @@ export class Pop extends Component {
                 Nombre:
               </Col>
               <Col xs={6}>
-              {this.props.item.NombreDispositivo}
+              {this.truncateText(this.props.item.nombreDispositivo,10)}
               </Col>
             </Row>
           </div>
@@ -181,7 +195,7 @@ export class Pop extends Component {
               Tipo:
               </Col>
               <Col xs={6}>
-              {this.props.item.Tipo}
+              {this.props.item.tipo}
               </Col>
             </Row>
           </div>
@@ -189,10 +203,10 @@ export class Pop extends Component {
           <div style={styles.textEliminar}>
             <Row>
               <Col xs={6}>
-              Tamaño:
+              Variante:
               </Col>
               <Col xs={6}>
-              {this.props.item.Tamaño}
+              {this.props.item.tamaño}
               </Col>
             </Row>
           </div>
@@ -212,7 +226,7 @@ export class Pop extends Component {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{this.props.item.NombreDispositivo}</Modal.Title>
+          <Modal.Title>{this.truncateText(this.props.item.nombreDispositivo,15)}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={styles.containerBody}>
           <Nav fill variant="pills" defaultActiveKey={this.state.selected}>

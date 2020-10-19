@@ -38,12 +38,15 @@ export class AddItem extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
   }
+
+  //Cierra el modal
   handleClose = () => {
     this.setState({
       showModal: false,
     });
   };
 
+  //Abre el modal
   handleOpen = () => {
     this.setState({
       showModal: true,

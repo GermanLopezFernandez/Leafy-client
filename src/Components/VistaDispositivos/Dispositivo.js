@@ -21,21 +21,22 @@ const styles = {
   icon: {
     height: "30px",
     width: "30px",
-    marginTop: "10px",
+  },
+  edit: {
+    height: "25px",
+    width: "25px",
   },
   imgWrap: {
     width: "100%",
   },
   nombre: {
-    height: "55px",
-    lineHeight: "55px",
+    height: "60px",
     fontWeight: "500",
   },
   horas: {
-    height: "55px",
-    lineHeight: "55px",
+    height: "60px",
     fontWeight: "600",
-    fontSize: "20px",
+    fontSize: "15px",
   },
 };
 
@@ -58,9 +59,16 @@ export class Dispositivo extends Component {
     });
   };
 
+  truncateText = (text, length) => {
+    if (text.length <= length) {
+      return text;
+    }
+    return text.substr(0, length) + '..';
+  };
+
   render() {
     let iconoDispositivo = listaDispositivos.find(
-      (electronico) => electronico.nombre === this.props.item.Tipo
+      (electronico) => electronico.nombre === this.props.item.tipo
     ).icono;
     return (
       <div>
@@ -68,12 +76,15 @@ export class Dispositivo extends Component {
           showModal={this.state.showModal}
           item={this.props.item}
           handleClose={() => this.handleClose()}
-          sumarUso={(objeto) => this.props.sumarUso(objeto)} 
-          eliminar={(objeto) => this.props.eliminar(objeto)} 
+          sumarUso={(objeto) => this.props.sumarUso(objeto)}
+          eliminar={(objeto) => this.props.eliminar(objeto)}
         />
         <div style={styles.container}>
           <Row>
-            <Col xs={2}>
+            <Col
+              xs={2}
+              className="d-flex align-items-center justify-content-center"
+            >
               <img
                 src={iconoDispositivo}
                 alt="Icono Producto"
@@ -81,20 +92,28 @@ export class Dispositivo extends Component {
                 onClick={() => this.handleOpen()}
               />
             </Col>
-            <Col xs={5}>
-              <div style={styles.nombre}>
-                {this.props.item.NombreDispositivo}
+            <Col xs={5} className="d-flex align-items-center">
+              <div style={styles.nombre} className="d-flex align-items-center">
+              {this.truncateText(this.props.item.nombreDispositivo, 14)}
               </div>
             </Col>
-            <Col xs={3}>
-              <div style={styles.horas}>{this.props.item.Sumatoria} hrs</div>
+            <Col
+              xs={3}
+              className="d-flex align-items-center justify-content-center"
+            >
+              <div style={styles.horas} className="d-flex align-items-center">
+                {this.props.item.sumatoria} hrs
+              </div>
             </Col>
-            <Col xs={2}>
+            <Col
+              xs={2}
+              className="d-flex align-items-center justify-content-center"
+            >
               <div style={styles.imgWrap}>
                 <img
                   src={iconoEditar}
                   alt="Icono editar"
-                  style={styles.icon}
+                  style={styles.edit}
                   onClick={() => this.handleOpen()}
                 />
               </div>
