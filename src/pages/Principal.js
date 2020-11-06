@@ -51,7 +51,7 @@ export default class Principal extends Component {
           <Form>
             <div className="d-flex justify-content-center">
               <Button size="lg" style={styles.buttonLogin} href="/login">
-                Iniciar sesion
+                Iniciar sesión
               </Button>
             </div>
             <div className="d-flex justify-content-center">

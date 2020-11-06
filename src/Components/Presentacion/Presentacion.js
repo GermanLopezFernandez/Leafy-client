@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Pop from "./Pop"
-import Cookies from 'js-cookie';
 import { withRouter } from 'react-router'; 
 const styles = {
   cuadroVerde: {
@@ -51,6 +50,9 @@ const styles = {
     marginTop: "30px",
   },
 };
+
+
+
 export class Presentacion extends Component {
   constructor(props) {
     super(props);
@@ -77,13 +79,13 @@ export class Presentacion extends Component {
   }
 
   logout = () => {
-    Cookies.remove("jwt")
+    localStorage.removeItem('leafyToken')
     this.props.history.push("/")
   }
   render() {
     return (
       <div>
-        <Pop showModal={this.state.showModal} handleClose={() => this.handleClose()} changeProfile={(objeto)=> this.props.changeProfile(objeto)}/>
+        <Pop showModal={this.state.showModal} handleClose={() => this.handleClose()} changeProfile={(objeto)=> this.props.changeProfile(objeto)} perfil={this.props.perfil}/>
         <div style={styles.cuadroVerde}>{this.props.perfil.NombreUsuario}</div>
         <div style={styles.titleContainer}>
           <div className="col-xs-12 mt-2">

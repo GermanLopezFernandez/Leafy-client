@@ -6,8 +6,8 @@ import Col from "react-bootstrap/Col";
 import hogar from "../../images/iconoHogar.svg";
 import dispositivos from "../../images/iconoFoco.svg";
 import perfil from "../../images/iconoPerfil.svg";
+import video from "../../images/iconoVideo.svg";
 import { NavLink } from "react-router-dom";
-
 
 const styles = {
   container: {
@@ -17,11 +17,14 @@ const styles = {
     width: "100%",
     height: "70px",
     textUnderline: "none",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    paddingLeft: "5px",
+    paddingRight: "5px"
   },
   centerText: {
     textAlign: "center",
     marginTop: "5px",
+    fontSize: "15px"
   },
   icon: {
     marginTop: "10px",
@@ -37,12 +40,12 @@ const styles = {
 const items = [
   {
     route: "/home",
-    word: "Mi hogar",
+    word: "Hogar",
     icono: hogar,
   },
   {
     route: "/dispositivos",
-    word: "Dispositivos",
+    word: "Aparatos",
     icono: dispositivos,
   },
   {
@@ -50,11 +53,16 @@ const items = [
     word: "Perfil",
     icono: perfil,
   },
+  {
+    route: "/consejos",
+    word: "Consejos",
+    icono: video,
+  }
 ];
 
 let itemsMap = items.map((item, i) => {
   return (
-    <Col xs={4} key={i}>
+    <Col xs={3} key={i}>
       <NavLink
         to={item.route}
         style={styles.notDecoration}

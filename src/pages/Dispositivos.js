@@ -13,7 +13,7 @@ import VistaDispositivos from "../Components/VistaDispositivos/VistaDispositivos
 import lupa from "../images/lupa.svg";
 const styles = {
   container: {
-    paddingBottom: "70px",
+    paddingBottom: "60px",
     minHeight: "100vh",
     backgroundColor: "#ECECEC",
   },
@@ -107,7 +107,8 @@ export class Dispositivos extends Component {
   };
 
   eliminar = (objeto) => {
-    axios
+    if (objeto.horas !== 0){
+      axios
       .post(
         "/devices/deshabilitarDisp",
         objeto,
@@ -127,6 +128,7 @@ export class Dispositivos extends Component {
         this.forceUpdate();
       })
       .catch((err) => {});
+    }
   };
 
   render() {

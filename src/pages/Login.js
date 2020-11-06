@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button, Container } from "reactstrap";
-import Cookies from "js-cookie";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 
@@ -26,6 +25,7 @@ export default class Login extends Component {
       passwordError: "",
       email: "",
       password: "",
+      loading: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.signIn = this.signIn.bind(this);
@@ -37,10 +37,13 @@ export default class Login extends Component {
     });
   };
 
-  signIn = () => {
+  signIn = (event) => {
+    event.preventDefault()
+    this.setState({
+      loading: true,
+    });
     if (!this.state.email) {
       this.setState({
-        loading: false,
         emailError: "No debe estar vacío",
         message: "",
       });
@@ -51,7 +54,6 @@ export default class Login extends Component {
     }
     if (!this.state.password) {
       this.setState({
-        loading: false,
         passwordError: "No debe estar vacío",
         message: "",
       });
@@ -70,28 +72,28 @@ export default class Login extends Component {
           { crossDomain: true }
         )
         .then((res) => {
-          this.setState({
-            loading: false,
-          });
           axios.defaults.headers.common["Authorization"] =
-            "Bearer " + Cookies.get("jwt");
+            "Bearer " + res.data.token;
+          localStorage.setItem('leafyToken', res.data.token)
           this.props.history.push("/home");
         })
         .catch((err) => {
           this.setState({
             message: err.response.data.error,
-            loading: false,
           });
         });
     }
+    this.setState({
+      loading: false,
+    });
   };
 
   render() {
     return (
       <Container styles={styles.container}>
         <div>
-          <h1 style={styles.title}>Iniciar Sesion</h1>
-
+          <h1>Iniciar sesión</h1>
+          <hr className="my-3" />
           <Form>
             <FormGroup>
               <Label>Correo</Label>
@@ -149,8 +151,10 @@ export default class Login extends Component {
 
             <div className="d-flex justify-content-center">
               <Button
+                type="submit"
                 color="primary"
-                onClick={() => this.signIn()}
+                disabled={this.state.loading}
+                onClick={(event) => this.signIn(event)}
                 className="btn btn-default"
                 size="lg"
                 style={{

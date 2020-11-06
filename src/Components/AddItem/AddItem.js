@@ -15,7 +15,7 @@ const styles = {
     backgroundColor: "white",
   },
   title: {
-    fontSize: "20px",
+    fontSize: "30px",
     color: "#464646",
   },
   icon: {
@@ -60,7 +60,7 @@ export class AddItem extends Component {
         <div style={styles.container}>
         <Row>
           <Col xs={10}>
-            <h2 style={styles.title}>Dispositivos</h2>
+            <h1 style={styles.title}>Dispositivos</h1>
           </Col>
           <Col xs={2}>
             <div style={styles.imgWrap}>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
+import Alert from "react-bootstrap/Alert";
 import listaDispositivos from "../extras/listaDispositivos";
 
 const styles = {
@@ -19,6 +19,7 @@ export class Pop extends Component {
       nombre: "",
       variacion: "",
       opciones: [],
+      errorVacio: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,13 +33,32 @@ export class Pop extends Component {
   };
 
   handleSubmit = () => {
-    const objeto = {
-      tipo: this.state.tipo,
-      tamaño: this.state.variacion,
-      nombreDispositivo: this.state.nombre,
-    };
-    this.props.registrarDispositivo(objeto);
-    this.props.handleClose();
+    if (
+      (
+        this.state.tipo === "" ||
+        this.state.variacion === "" ||
+        this.state.nombre === ""
+      )
+    ) {
+      this.setState({
+        errorVacio: "No deben de exitir campos vacios",
+      });
+    } else {
+      const objeto = {
+        tipo: this.state.tipo,
+        tamaño: this.state.variacion,
+        nombreDispositivo: this.state.nombre,
+      };
+      this.setState({
+        tipo: "",
+        nombre: "",
+        variacion: "",
+        opciones: [],
+        errorVacio: "",
+      });
+      this.props.registrarDispositivo(objeto);
+      this.props.handleClose();
+    }
   };
 
   checkFirstSelection = (event) => {
@@ -113,6 +133,13 @@ export class Pop extends Component {
               />
               <Form.Text className="text-muted">Ej. Tv Sala</Form.Text>
             </Form.Group>
+            {this.state.errorVacio !== "" ? (
+              <Alert variant="danger" className="text-center">
+                {this.state.errorVacio}
+              </Alert>
+            ) : (
+              ""
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>

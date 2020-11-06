@@ -17,15 +17,18 @@ import Perfil from "./pages/Perfil";
 import Principal from "./pages/Principal";
 import RegisterForm from "./pages/RegisterForm";
 import Login from "./pages/Login";
+import Consejos from "./pages/Consejos";
 
 //Axios Config
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "https://leafy.depatrix.com";
+//axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.headers.common["access-control-allow-origin"] = "*";
 
 export class App extends Component {
   render() {
     return (
       <div>
+
         <Router history={createBrowserHistory}>
           <CheckIfLogin />
           <ScrollToTop />
@@ -35,6 +38,7 @@ export class App extends Component {
             <Route exact path="/perfil" component={Perfil} />
             <Route exact path="/" component={Principal} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/consejos" component={Consejos} />
             <Route exact path="/Register" component={RegisterForm} />
           </Switch>
         </Router>

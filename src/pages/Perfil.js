@@ -8,7 +8,7 @@ import axios from "axios";
 
 const styles = {
   container: {
-    paddingBottom: "70px",
+    paddingBottom: "80px",
     minHeight: "100vh",
     backgroundColor: "#ECECEC"
   },
@@ -50,7 +50,12 @@ export class Perfil extends Component {
           )
           .then((res) => {
             let modifiedState = this.state.perfil
-            modifiedState.NombreUsuario = objeto.nuevoNombre
+            if(objeto.nuevoNombre){
+              modifiedState.NombreUsuario = objeto.nuevoNombre
+            }
+            if(objeto.nuevoCorreo){
+              modifiedState.Correo = objeto.nuevoCorreo
+            }
             this.setState({
               perfil: modifiedState
             }) 

@@ -1,14 +1,28 @@
 import React, { Component } from "react";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
-import Cookies from "js-cookie";
 import Axios from "axios";
 import Alert from "react-bootstrap/Alert";
 import logo from "../images/logo.png";
 
+//Regex para revisar si el correo es valido.
+let correoEsValido = (email) => {
+  return /\S+@\S+\.\S+/.test(email);
+};
+
+//Revisa si una cadena mide mas de numChar caracteres.
+//En la BD tenemos un maximo de estos valores.
+let stringMideMasDe = (email, numChar) => {
+  return email.length >= numChar;
+};
+
+//Revisa que la password mida por lo menos 8 caracteres.
+let passwordEsValido = (password) => {
+  return password.length >= 8;
+};
+
 export class RegisterForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       name: "",
       email: "",
@@ -23,6 +37,7 @@ export class RegisterForm extends Component {
       passwordCasaError: "",
       idcasa: "",
       idcasaError: "",
+      message:""
     };
     this.handleChange = this.handleChange.bind(this);
     this.Validate = this.Validate.bind(this);
@@ -31,80 +46,133 @@ export class RegisterForm extends Component {
     this.create = this.create.bind(this);
   }
 
+  //Funcion para cambiar el estado cuando un cambio se vea reflejado en las forms. 
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
+  //Cambia de pagina a success. Elegir entre crear casa o unirse a una. 
   succes = () => {
     this.setState({
       currentPage: "succes",
     });
   };
 
+  //Cambia de pagina a join. Para unirse a una casa. 
   join = () => {
     this.setState({
       currentPage: "join",
     });
   };
 
+  //Cambia de pagina a create. Para crear a una casa. 
   create = () => {
     this.setState({
       currentPage: "create",
     });
   };
 
-  Validate = (event) => {
+  //Valida que toda la informacion echa en el registro de usuario sea correcta, si si. Pasa a success. 
+  Validate = async (event) => {
     event.preventDefault();
+    this.setState({
+      loading: true,
+    });
+    let emailValido = false;
+    let passwordValido = false;
+    //VALIDACION DEL CORREO
+    //Si se encuentra vacío, marca error de que no se debe de encontrar vacio. 
     if (!this.state.email) {
       this.setState({
-        loading: false,
         emailError: "No debe estar vacío",
-        message: "",
       });
     } else {
-      this.setState({
-        emailError: "",
-      });
+      //Revisar que la string no mide mas de 70 chars. (Requisito de la BD).
+      if (stringMideMasDe(this.state.email, 70)){
+        this.setState({
+          emailError: "No debe de contener más de 70 caracteres",
+        });
+      }
+      else{
+        //Revisar si el correo es valido mediante REGEX.
+        if (correoEsValido(this.state.email)) {
+          let Data = { correo: this.state.email };
+          //Revisar si el correo no se encuentra ya registrado en la BD. 
+          await Axios.post(
+            "/auth/checkIfMailExists",
+            Data,
+            { withCredentials: true },
+            { crossDomain: true }
+          )
+            //Si se pasan todas las pruebas, se marca que el correo no tiene errores.   
+            .then((res) => {
+              this.setState({
+                emailError: "",
+              });
+              emailValido = true;
+            })
+            .catch((err) => {
+              this.setState({
+                emailError: err.response.data.error,
+              });
+            });
+        //Si el correo no es valido, se registra. 
+        } else {
+          this.setState({
+            emailError: "Debe de ser un correo válido",
+          });
+        }
+      }
     }
+    //VALIDACION DE PASSWORD
+    //Si se encuentra vacia, se registra. 
     if (!this.state.password) {
       this.setState({
-        loading: false,
         passwordError: "No debe estar vacío",
-        message: "",
       });
     } else {
-      this.setState({
-        passwordError: "",
-      });
+      //Revisar que la password mida por lo menos 8 chars.
+      if (passwordEsValido(this.state.password)) {
+        passwordValido = true;
+        this.setState({
+          passwordError: "",
+        });
+      } else {
+        this.setState({
+          passwordError: "La contraseña debe de medir mínimo 8 caractéres",
+        });
+      }
     }
+    //VALIDACION DE NOMBRE
+    //Revisar que no se encuentre vacio el nombre
     if (!this.state.name) {
       this.setState({
-        loading: false,
         nameError: "No debe estar vacío",
-        message: "",
       });
     } else {
-      this.setState({
-        nameError: "",
-      });
+      //Validar que no mida mas de 70 caracteres.
+      if(stringMideMasDe(this.state.name, 70)){
+        this.setState({
+          nameError: "No debe de contener más de 70 caracteres",
+        });
+      }
+      else{
+        this.setState({
+          nameError: "",
+        });
+      }
     }
+    //VALIDACION DE CONFIRM PASSWORD
     if (!this.state.confirmPassword) {
       this.setState({
-        loading: false,
         confirmPasswordError: "No debe estar vacío",
-        message: "",
       });
     } else {
-      this.setState({
-        confirmPasswordError: "",
-      });
       if (this.state.confirmPassword !== this.state.password) {
         this.setState({
-          loading: false,
           confirmPasswordError: "Las contraseñas deben de ser iguales",
-          message: "",
         });
       } else {
         this.setState({
@@ -112,6 +180,8 @@ export class RegisterForm extends Component {
         });
       }
     }
+    //Validar que no exista ningun error en el registro.
+    //Si no existe, se cambia a la pagina de success.
     if (
       !(
         this.state.email === "" ||
@@ -119,43 +189,50 @@ export class RegisterForm extends Component {
         this.state.name === "" ||
         this.state.confirmPassword === "" ||
         this.state.confirmPassword !== this.state.password
-      )
+      ) &&
+      emailValido &&
+      passwordValido
     ) {
       this.setState({
         currentPage: "succes",
       });
     }
+    this.setState({
+      loading: false,
+    });
   };
 
+  //Funcion para unirse a una casa. 
   joinUp = (event) => {
     event.preventDefault();
+    this.setState({
+      loading: true,
+    });
+    //Revisamos que la password de la casa no este vacia.
     if (!this.state.passwordCasa) {
       this.setState({
-        loading: false,
         passwordCasaError: "No debe estar vacio",
-        message: "",
+        message: ""
       });
     } else {
       this.setState({
         passwordCasaError: "",
       });
     }
+    //Revisamos que el id de la casa no este vacio.
     if (!this.state.idcasa) {
       this.setState({
-        loading: false,
         idcasaError: "No debe estar vacio",
-        message: "",
+        message: ""
       });
     } else {
       this.setState({
-        passwordCasaError: "",
+        idcasaError: "",
       });
     }
     if (
       !(
-        this.state.email === "" ||
-        this.state.password === "" ||
-        this.state.name === "" ||
+        this.state.idcasa === "" ||
         this.state.passwordCasa === ""
       )
     ) {
@@ -173,25 +250,25 @@ export class RegisterForm extends Component {
         { crossDomain: true }
       )
         .then((res) => {
-          this.setState({
-            loading: false,
-          });
           Axios.defaults.headers.common["Authorization"] =
-            "Bearer " + Cookies.get("jwt");
+            "Bearer " + res.data.token;
+          localStorage.setItem('leafyToken', res.data.token)
           this.props.history.push("/home");
         })
         .catch((err) => {
           this.setState({
             message: err.response.data.error,
-            loading: false,
           });
         });
     }
+    this.setState({
+      loading: false,
+    });
   };
 
   createUp = (event) => {
+    let passwordValido = false
     event.preventDefault();
-    console.log("aa");
     if (!this.state.passwordCasa) {
       this.setState({
         loading: false,
@@ -199,9 +276,16 @@ export class RegisterForm extends Component {
         message: "",
       });
     } else {
-      this.setState({
-        passwordCasaError: "",
-      });
+      if (passwordEsValido(this.state.passwordCasa)) {
+        this.setState({
+          passwordCasaError: "",
+        });
+        passwordValido = true
+      } else {
+        this.setState({
+          passwordCasaError: "La contraseña debe de medir mínimo 8 caractéres",
+        });
+      }
     }
     if (
       !(
@@ -209,7 +293,7 @@ export class RegisterForm extends Component {
         this.state.password === "" ||
         this.state.name === "" ||
         this.state.passwordCasa === ""
-      )
+      ) && passwordValido
     ) {
       const Data = {
         correo: this.state.email,
@@ -217,7 +301,6 @@ export class RegisterForm extends Component {
         nombreUsuario: this.state.name,
         contraseñaCasa: this.state.passwordCasa,
       };
-      console.log(Data);
       Axios.post(
         "/auth/register",
         Data,
@@ -229,7 +312,8 @@ export class RegisterForm extends Component {
             loading: false,
           });
           Axios.defaults.headers.common["Authorization"] =
-            "Bearer " + Cookies.get("jwt");
+            "Bearer " + res.data.token;
+          localStorage.setItem('leafyToken', res.data.token)
           this.props.history.push("/home");
         })
         .catch((err) => {
@@ -244,22 +328,15 @@ export class RegisterForm extends Component {
   render() {
     let join = (
       <div className="col-md-6">
-        <h1>Join</h1>
+        <h1>Unirse a una casa</h1>
         <hr className="my-3" />
-        {this.state.message !== "" ? (
-          <Alert color="danger" className="text-center">
-            {this.state.message}
-          </Alert>
-        ) : (
-          ""
-        )}
         <Form>
           <FormGroup>
-            <Label for="id">ID </Label>
+            <Label for="id">ID de la casa</Label>
             <Input
               type="text"
               id="id"
-              placeholder="Ingrese la id "
+              placeholder="ID de la casa"
               name="idcasa"
               onChange={(event) => this.handleChange(event)}
             />
@@ -273,12 +350,12 @@ export class RegisterForm extends Component {
             ""
           )}
           <FormGroup>
-            <Label for="Housepassword">Contraseña de Hogar</Label>
+            <Label for="Housepassword">Contraseña de la casa</Label>
             <Input
-              type="Housepassword"
+              type="password"
               id="Housepassword"
               name="passwordCasa"
-              placeholder="ingrese La contraseña de hogar"
+              placeholder="Contraseña de la casa"
               onChange={(event) => this.handleChange(event)}
             />
           </FormGroup>
@@ -289,8 +366,16 @@ export class RegisterForm extends Component {
           ) : (
             ""
           )}
+          {this.state.message ? (
+          <Alert variant="danger" className="text-center">
+            {this.state.message}
+          </Alert>
+        ) : (
+          ""
+        )}
           <div className="d-flex justify-content-center">
             <Button
+              disabled={this.state.loading}
               color="primary"
               onClick={this.joinUp}
               className="btn btn-default"
@@ -301,8 +386,7 @@ export class RegisterForm extends Component {
                 border: "none",
               }}
             >
-              {" "}
-              ingresar{" "}
+              Ingresar
             </Button>
           </div>
         </Form>
@@ -335,6 +419,7 @@ export class RegisterForm extends Component {
           <FormGroup>
             <div className="d-flex justify-content-center">
               <Button
+              disabled={this.state.loading}
                 type="submit"
                 className="btn btn-default"
                 size="lg"
@@ -486,6 +571,7 @@ export class RegisterForm extends Component {
             </div>
             <div className="d-flex justify-content-center">
               <Button
+                disabled={this.state.loading}
                 type="submit"
                 className="btn btn-default"
                 size="lg"
