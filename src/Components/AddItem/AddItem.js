@@ -19,8 +19,8 @@ const styles = {
     color: "#464646",
   },
   icon: {
-    height: "25px",
-    width: "25px",
+    height: "35px",
+    width: "35px",
     position: "absolute",
     left: "50%",
     top: "50%",

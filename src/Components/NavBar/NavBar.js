@@ -49,15 +49,15 @@ const items = [
     icono: dispositivos,
   },
   {
+    route: "/consejos",
+    word: "Consejos",
+    icono: video,
+  },
+  {
     route: "/perfil",
     word: "Perfil",
     icono: perfil,
   },
-  {
-    route: "/consejos",
-    word: "Consejos",
-    icono: video,
-  }
 ];
 
 let itemsMap = items.map((item, i) => {

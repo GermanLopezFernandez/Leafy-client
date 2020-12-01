@@ -1,13 +1,13 @@
 const lista = [
     {
       nombre: "Revisa tu instalación eléctrica",
-      url: "https://www.youtube.com/embed/kodmzBno7xk",
+      url: "https://www.youtube.com/embed/YCQsxqCfiz0",
       id: "0",
       descripcion: "Revisa que no haya fugas eléctricas, sobre todo si tu casa fue construida hace más de 10 años."
     },
     {
       nombre: "Desconecta los aparatos eléctricos cuando no se utilicen",
-      url: "https://www.youtube.com/embed/FDSMMK8ZtHw",
+      url: "https://www.youtube.com/embed/nqDCSzPssX4",
       id: "1",
       descripcion: "Muchos aparatos consumen energía aunque estén apagados como el cargador de celular o la computadora, así como las pantallas o las consolas de videojuegos."
     },
@@ -37,7 +37,7 @@ const lista = [
     },
     {
       nombre: "Aprovecha la iluminación natural",
-      url: "https://www.youtube.com/embed/lOODzVi6HLA",
+      url: "https://www.youtube.com/embed/COuC0e7LCj8",
       id: "6",
       descripcion: "En las zonas de clima templado en el país, las habitaciones con tragaluces, ventanas o domos no requieren mucha iluminación eléctrica. En las zonas de clima tropical, las ventanas también sirven como fuente de iluminación pero, a causa del calor, su apertura es más recomendable en las mañanas o al final del día."
     },
@@ -55,7 +55,7 @@ const lista = [
     },
     {
       nombre: "Sustituye los focos incandescentes por focos ahorradores o LEDs",
-      url: "https://www.youtube.com/embed/B16KzVKS854",
+      url: "https://www.youtube.com/embed/dbTBMMcsr10",
       id: "9",
       descripcion: "Verifica que tus focos sean de fabricantes reconocidos que ofrezcan altos niveles de iluminación y una larga vida útil. Para las áreas de uso común, como pasillos, escaleras o estacionamientos, te recomendamos que uses luminarias con sensores de movimiento."
     },

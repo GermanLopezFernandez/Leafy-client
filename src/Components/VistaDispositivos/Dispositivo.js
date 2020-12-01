@@ -19,8 +19,8 @@ const styles = {
     paddingBottom: "10px",
   },
   icon: {
-    height: "30px",
-    width: "30px",
+    height: "35px",
+    width: "35px",
   },
   edit: {
     height: "25px",

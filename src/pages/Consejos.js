@@ -66,7 +66,7 @@ export class Consejos extends Component {
     if (settings) settings = JSON.parse(settings);
     if (!settings || settings.date < midNight.toJSON() ) {
         settings = {
-            selection: Math.floor(Math.random() * (this.state.consejos.length + 1)),
+            selection: Math.floor(Math.random() * (this.state.consejos.length)),
             date: midNight.toJSON()
         };
         localStorage.setItem('selection', JSON.stringify(settings));
@@ -95,7 +95,7 @@ export class Consejos extends Component {
       Math.floor(Math.random() * (this.state.consejos.length + 1))
 
     return (
-      <div style={styles.container}>
+      <div style={styles.container} className="mt-2">
         <div style={styles.containerTitle}>
         <Row>
           <Col xs={12}>

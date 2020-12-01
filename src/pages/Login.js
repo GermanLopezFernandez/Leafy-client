@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 
 const styles = {
   title: {
-    paddingTop: "50px",
+    paddingTop: "30px",
     fontSize: "30px",
     paddingBottom: "10px",
   },
@@ -91,7 +91,7 @@ export default class Login extends Component {
   render() {
     return (
       <Container styles={styles.container}>
-        <div>
+        <div className="mt-2">
           <h1>Iniciar sesión</h1>
           <hr className="my-3" />
           <Form>

@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-
-
 import NavBar from "../Components/NavBar/NavBar"
 import Presentacion from "../Components/Presentacion/Presentacion"
 

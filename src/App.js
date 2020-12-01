@@ -28,7 +28,6 @@ export class App extends Component {
   render() {
     return (
       <div>
-
         <Router history={createBrowserHistory}>
           <CheckIfLogin />
           <ScrollToTop />

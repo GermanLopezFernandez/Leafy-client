@@ -394,7 +394,7 @@ export class RegisterForm extends Component {
     );
 
     let create = (
-      <div className="col-md-6">
+      <div className="col-md-6 mt-2">
         <h1>Registrar Hogar</h1>
         <hr className="my-3" />
         <Form>
@@ -486,7 +486,7 @@ export class RegisterForm extends Component {
     );
 
     let registro = (
-      <div className="col-md-6">
+      <div className="col-md-6 mt-2">
         <h1>Registrar</h1>
         <hr className="my-3" />
         <Form>
